@@ -1,0 +1,234 @@
+Задание 1
+
+void main() {
+  Future.delayed(Duration(seconds: 2), () => "Привет,Future!")
+    .then((value) => print(value));
+}
+
+Задание 2
+
+void main() async {
+  String result = await Future.delayed(Duration(seconds: 2), () => "Привет,Future!");
+  print(result);
+}  
+
+Задание 3
+
+void main() async {
+  Future.delayed(Duration(seconds: 2), () => throw Exception("Ошибка!"))
+  .catchError((error) => print(error));
+}  
+
+Задание 4
+
+void main() async {
+ try {
+   await Future.delayed(Duration(seconds: 2), () => throw Exception("Ошибка!"));
+ } catch (e) {
+   print(e);
+ }
+}    
+
+Задание 5
+
+void main() {
+  Stream.periodic(Duration(seconds: 1), (count) => count + 1)
+  .take(5)
+  .listen((value) => print(value));
+} 
+
+Задание 6
+
+void main() async {
+  await for(var value in Stream.periodic(Duration(seconds: 1), (count) => count + 1).take(5)) {
+    print(value);
+  }
+}
+
+Задание 7
+
+void main() {
+  Stream.periodic(Duration(seconds: 1), (count) {
+    if (count == 2) {
+      throw Exception("Ошибка на третей итерации!"); 
+    }
+    return count + 1;
+  })
+  .take(5)
+  .listen(
+  (value) => print(value),
+  onError: (error) => print(error),
+  );
+}
+
+Задание 8
+
+void main() async {
+  try {
+    await for (var value in Stream.periodic(Duration(seconds: 1),
+   (count) {
+     if (count ==2){
+       throw Exception("Ошибка на третей итерации!");
+     }
+     return count + 1;
+   }).take(5)) {
+      print(value);
+    }
+  }catch (e) {
+    print(e);
+  } 
+}
+
+Задание 9
+
+void main() {
+  Stream.periodic(Duration(seconds: 1), (count) => count + 1)
+    .take(5)
+    .listen((value) => print(value))
+    .asFuture()
+    .then((_) => print("Stream завершен"));
+} 
+
+Задание 10
+
+void main() async {
+  await for(var value in Stream.periodic(Duration(seconds: 1), (count) => count + 1).take(5)) {
+    print(value);
+  }
+    print("Stream завершен");
+}
+
+Задание 11
+
+void main() {
+  Future.delayed(Duration(seconds: 2), () => "Привет, Futer!")
+    .asStream()
+    .listen((value) => print(value));
+}
+Задание 12
+
+void main() async {
+  await for (var value in Future.delayed(Duration(seconds: 2), () => "Привет, Futer!").asStream()) {
+    print(value);
+  }
+}
+Задание 13
+
+void main() {
+  Future<String> future1 = Future.delayed(Duration(seconds: 2), () => "Привет!");
+  Future<String> future2 = Future.delayed(Duration(seconds: 3), () => "Future!");
+  
+  Future.wait([future1, future2])
+    .then((results) => print(results.join(" ")));
+}
+Задание 14
+
+void main() async {
+  Future<String> future1 = Future.delayed(Duration(seconds: 2), () => "Привет!");
+  Future<String> future2 = Future.delayed(Duration(seconds: 3), () => "Future!");
+  
+  List<String> results = await Future.wait([future1, future2]);
+    print(results.join(" "));
+}
+Задание 15
+
+import 'dart:async';
+import 'package:async/async.dart';
+void main() {
+ Stream<int> stream1 = Stream.periodic(Duration(seconds: 1), (count) => count + 1).take(3);
+  Stream<int> stream2 = Stream.periodic(Duration(seconds: 1), (count) => count + 4).take(3);
+  
+  StreamGroup.merge([stream1, stream2])
+   .listen((value) => print(value));
+}
+Задание 16
+
+import 'dart:async';
+import 'package:async/async.dart';
+
+void main() async {
+ Stream<int> stream1 = Stream.periodic(Duration(seconds: 1), (count) => count + 1).take(3);
+  Stream<int> stream2 = Stream.periodic(Duration(seconds: 1), (count) => count + 1).take(3);
+  
+ await for (var  value in StreamGroup.merge([stream1, stream2])) {
+  print(value);
+  }
+}
+Задание 17
+
+void main() {
+  Stream.periodic(Duration(seconds: 1), (count) => count + 1)
+    .take(5)
+    .map((value) => "число $value")
+    .listen((value) => print(value));
+}
+Задание 18
+
+void main() async {
+  await for (var value in Stream.periodic(Duration(seconds:1), (count) => count +1).take(5).map((value) => "число $value")) {
+    print(value);
+  }
+}
+Задание 19
+
+void main() {
+  Stream.periodic(Duration(seconds: 1), (count) => count + 1)
+    .take(10)
+    .where((value) => value % 2 == 0)
+    .listen((value) => print(value));
+}
+Задание 20
+
+void main() async {
+  await for (var value in Stream.periodic(Duration(seconds:1), (count) => count +1).take(10).where((value) => value % 2 == 0)) {
+    print(value);
+  }
+}
+
+Индивидуальные задания
+
+Задание 1
+
+import 'dart:io';
+import 'dart:async';
+
+void main() async {
+  try {
+    final file = File('ttt.txt'); 
+    final contents = await file.readAsString();
+    print(contents);
+  } catch (e) {
+    print('Ошибка при чтении файла: $e');
+  }
+}
+Задание 2
+
+import 'dart:async';
+import 'dart:math';
+
+Future<List<int>> sortListAsync(int ) async {
+  await Future.delayed(Duration(seconds: 1));
+  // Сортируем список 
+  list.sort();
+  return list;
+}
+
+void main() async {
+  // Создаем список случайных чисел
+  final random = Random();
+  final list = List.generate(5, (_) => random.nextInt(30));
+
+  print('Исходный список: $list');
+
+  // Сортируем список 
+  final sortedList = await sortListAsync(list.toList()); // Создаем копию, чтобы не менять исходный список
+
+  print('Отсортированный список: $sortedList');
+}
+Задание 3
+
+void main() async {
+  await for (var value in Stream.periodic(Duration(seconds:2), (count) => count +1).take(6).map((value) => "Таск №$value ")) {
+    print(value);
+  }
+}
